@@ -5,7 +5,7 @@ account: declanrjb
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11037380
-bundleId: 8184929
+bundleId: 8185224
 url: https://declanrjb.shinyapps.io/reed-covid-dashboard/
 version: 1
 asMultiple: FALSE

@@ -139,16 +139,19 @@ ui <- fluidPage(
           margin: 0 0 10px;
           font-family: times;
         }
+        .paginate_button {
+          border-radius: 5px !important;
+        }
         .paginate_button.current {
-          color: #333 !important;
+          color: yellow !important;
           border: 1px solid #333;
           background: #ffffff !important;
-          background-color: white;
         }
-        .paginate_button:hover {
-          color: #ffffff !!important;
-          border: solid transparent;
-          box-shadow: 0 1px 5px #666;
+        .dataTables_wrapper:hover .dataTables_paginate:hover .paginate_button:hover {
+          color: #000000 !important;
+          background: #ffffff;
+          box-shadow: 0 1px 3px #666;
+          border: 1px solid #333;
         }
     ')
   )),
@@ -195,7 +198,7 @@ server <- function(input, output) {
       theme_bw()
   })
   
-  output$table <- DT::renderDataTable(tf,options = list(scrollX = TRUE, pageLength=20),
+  output$table <- DT::renderDataTable(tf,options = list(scrollX = TRUE, pageLength=10),
                                       rownames = FALSE)
 }
 
