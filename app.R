@@ -21,13 +21,21 @@ library(DT)
 
 json_file <- "https://sheets.googleapis.com/v4/spreadsheets/1jPA-iftpPkg-91ST9ALzTtVJDqIv-ovyfSJaNHjpwtg/values/2022-23?alt=json&key=AIzaSyBGleujEZPzO5R3TWOhn7OdeE1jgrxby0k"
 
-df <- fromJSON(json_file)
+data <- fromJSON(json_file)
 
-df <- df$values
+data <- data$values
 
-df <- data.frame(df)
+df <- as.data.frame(matrix(ncol=3,nrow=length(data)))
+
+for (i in 1:length(data)) {
+  curr_row <- data[[i]]
+  for (j in 1:length(curr_row)) {
+    df[i,j] <- curr_row[j]
+  }
+}
 
 colnames(df) <- df[1,]
+df <- df[-c(1),]
 
 df <- df %>% filter(Role!="Role") %>%
   mutate(Role=ifelse(Role=="Studetn","Student",Role))
@@ -96,6 +104,10 @@ for (i in 1:length(cf$Dates)) {
 
 countDf <- cbind(countDf,Role=roleDf$Role)
 
+end <- dim(countDf)[1]
+countDf <- countDf[c(1:100),]
+
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
@@ -134,7 +146,7 @@ ui <- fluidPage(
           background-color: white;
         }
         .paginate_button:hover {
-          color: #000000 !!important;
+          color: #ffffff !!important;
           border: solid transparent;
           box-shadow: 0 1px 5px #666;
         }
@@ -164,13 +176,23 @@ server <- function(input, output) {
   output$distPlot <- renderPlot({
     
     # draw the histogram with the specified number of bins
-    ggplot(data=gf, aes(x=`Notification date`,fill=Role,colour=Role)) + geom_histogram(binwidth = 5,stat="count") + scale_x_date(date_labels="%b %d",date_breaks  ="1 month") + xlab("Notification Date") + ylab("Reported Cases") + theme_bw()
+    ggplot(data=gf, aes(x=`Notification date`,fill=Role,colour=Role)) + 
+      geom_histogram(binwidth = 5,stat="count") + 
+      scale_x_date(date_labels="%b %d",date_breaks  ="1 month") + 
+      xlab("Notification Date") + 
+      ylab("Reported Cases") + 
+      theme_bw()
   })
   
   output$campusPlot <- renderPlot({
     
     # draw the histogram with the specified number of bins
-    ggplot(data=countDf, aes(x=`Date`,fill=Role,colour=Role)) + geom_histogram(binwidth = 5,stat="count") + scale_x_date(date_labels="%b %d",date_breaks  ="2 weeks") + xlab("Date on Campus") + ylab("Reported Cases") + theme_bw()
+    ggplot(data=countDf, aes(x=`Date`,fill=Role,colour=Role)) + 
+      geom_histogram(binwidth = 5,stat="count") + 
+      scale_x_date(date_labels="%b %d",date_breaks  ="2 weeks") + 
+      xlab("Date on Campus") + 
+      ylab("Reported Cases") + 
+      theme_bw()
   })
   
   output$table <- DT::renderDataTable(tf,options = list(scrollX = TRUE, pageLength=20),

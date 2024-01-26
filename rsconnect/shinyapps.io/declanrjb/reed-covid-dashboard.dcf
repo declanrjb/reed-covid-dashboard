@@ -1,0 +1,12 @@
+name: reed-covid-dashboard
+title: reed-covid-dashboard
+username: declanrjb
+account: declanrjb
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11037380
+bundleId: 8184929
+url: https://declanrjb.shinyapps.io/reed-covid-dashboard/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
